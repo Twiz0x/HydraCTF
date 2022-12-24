@@ -1,0 +1,8 @@
+name: HydraCTF
+version: '${version}'
+main: me.twizox.ctf.HydraCTF
+load: POSTWORLD
+api-version: 1.8
+author: Twiz0x
+softdepend:
+  - PlaceholderAPI
