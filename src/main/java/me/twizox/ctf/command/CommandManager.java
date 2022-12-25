@@ -36,8 +36,6 @@ public class CommandManager {
         });
         handler.setLocale(Locale.FRENCH);
 
-        handler.getAutoCompleter().registerParameterSuggestions(Team.class,
-                SuggestionProvider.of(HydraCTF.getGame().getTeamManager().getTeamIds()));
     }
 
     public void load() {
@@ -45,6 +43,8 @@ public class CommandManager {
             throw new IllegalStateException("Commands are already registered!");
         handler.register(new GameCommand());
         registerCommands("location", new LocationCommand());
+        handler.getAutoCompleter().registerParameterSuggestions(Team.class,
+                SuggestionProvider.of(HydraCTF.getGame().getTeamManager().getTeamIds()));
         registered = true;
     }
 

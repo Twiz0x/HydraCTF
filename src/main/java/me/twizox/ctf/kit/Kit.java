@@ -2,6 +2,7 @@ package me.twizox.ctf.kit;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -45,7 +46,8 @@ public class Kit implements ConfigurationSerializable {
         return armor;
     }
 
-    public void give(PlayerInventory inventory) {
+    public void apply(Player player) {
+        PlayerInventory inventory = player.getInventory();
         inventory.setContents(items);
         inventory.setArmorContents(armor);
     }

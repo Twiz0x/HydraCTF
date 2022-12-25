@@ -1,5 +1,6 @@
 package me.twizox.ctf.command;
 
+import me.twizox.ctf.HydraCTF;
 import me.twizox.ctf.team.Team;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -27,6 +28,7 @@ public class LocationCommand implements OrphanCommand {
         if (actor.isConsole())
             throw new CommandErrorException("Vous devez être un joueur pour exécuter cette commande !");
         team.setSpawn(actor.getAsPlayer().getLocation());
+        HydraCTF.getGame().getTeamManager().saveTeam(team);
         actor.reply("Vous avez défini le spawn des " + team.displayName() + "s");
     }
 
@@ -40,6 +42,7 @@ public class LocationCommand implements OrphanCommand {
             throw new CommandErrorException("Vous devez viser un bloc");
 
         team.getFlag().setSpawnLocation(block.getLocation());
+        HydraCTF.getGame().getTeamManager().saveTeam(team);
         actor.reply("Vous avez défini le drapeau des " + team.displayName() + "s");
     }
 

@@ -1,5 +1,6 @@
 package me.twizox.ctf.game;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.twizox.ctf.HydraCTF;
 import me.twizox.ctf.data.DataManager;
 import me.twizox.ctf.data.GamePlayer;
@@ -8,6 +9,9 @@ import me.twizox.ctf.kit.KitManager;
 import me.twizox.ctf.team.Team;
 import me.twizox.ctf.team.TeamManager;
 import me.twizox.ctf.utils.config.FileConfig;
+import me.twizox.ctf.utils.config.JsonConfig;
+
+import java.io.IOException;
 
 public class Game {
 
@@ -18,7 +22,13 @@ public class Game {
 
     public Game() {
         this.dataManager = new DataManager();
-        this.teamManager = new TeamManager(new FileConfig("teams"));
+        this.teamManager = new TeamManager(new JsonConfig("teams", new ObjectMapper()));
+        try {
+            teamManager.loadTeams();
+        } catch (IOException e) {
+            HydraCTF.getInstance().getLogger().severe("Failed to load teams!");
+            throw new RuntimeException(e);
+        }
         this.kitManager = new KitManager(new FileConfig("kits"));
     }
 

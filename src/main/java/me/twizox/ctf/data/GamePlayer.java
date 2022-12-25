@@ -7,7 +7,11 @@ import me.twizox.ctf.team.Flag;
 import me.twizox.ctf.team.Team;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class GamePlayer {
 
@@ -22,6 +26,20 @@ public class GamePlayer {
         this.player = player;
     }
 
+    public void injectForLobby() {
+        player.setGameMode(GameMode.ADVENTURE);
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.setExp(0);
+        player.setLevel(0);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        player.setFireTicks(0);
+        player.setFallDistance(0);
+    }
+
     public void injectForFight() {
         if (team == null) {
             team = game.getTeamManager().getLessPlayerTeam();
@@ -30,8 +48,25 @@ public class GamePlayer {
         player.teleport(team.getSpawn());
 
         if (kit == null) kit = game.getKitManager().getFirstKit();
-        player.getInventory().setContents(kit.getItems());
-        player.getEquipment().setArmorContents(kit.getArmor());
+        if (kit != null) kit.apply(player);
+        else {
+            player.sendMessage("§7Aucun kit n'a été trouvé, vous avez donc été donné le kit par défaut.");
+            player.getInventory().setContents(List.of(
+                    new ItemStack(Material.IRON_SWORD),
+                    new ItemStack(Material.BOW),
+                    new ItemStack(Material.ARROW, 64),
+                    new ItemStack(Material.GOLDEN_APPLE, 2),
+                    new ItemStack(Material.COOKED_BEEF, 64),
+                    new ItemStack(Material.IRON_PICKAXE),
+                    new ItemStack(Material.STONE, 64)
+            ).toArray(new ItemStack[0]));
+            player.getInventory().setArmorContents(List.of(
+                    new ItemStack(Material.IRON_BOOTS),
+                    new ItemStack(Material.IRON_LEGGINGS),
+                    new ItemStack(Material.DIAMOND_CHESTPLATE),
+                    new ItemStack(Material.IRON_HELMET)
+            ).toArray(new ItemStack[0]));
+        }
 
         player.setGameMode(GameMode.SURVIVAL);
         player.setHealth(20);
@@ -43,7 +78,7 @@ public class GamePlayer {
         player.setFlying(false);
     }
 
-    public void injectForSpectator() {
+    public static void injectForSpectator(Player player) {
         player.setGameMode(GameMode.SPECTATOR);
         player.sendMessage("§7Une partie est en cours, vous êtes en mode spectateur.");
         player.teleport((Location) HydraCTF.getInstance().getConfig().get("spectator-location", player.getLocation()));

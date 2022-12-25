@@ -14,11 +14,11 @@ public final class HydraCTF extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        game = new Game();
 
         commandManager = new CommandManager(this);
-        commandManager.load();
+        game = new Game();
 
+        commandManager.load();
         ListenerRegistrer.register(this);
 
         getLogger().info("HydraCTF has been enabled!");
